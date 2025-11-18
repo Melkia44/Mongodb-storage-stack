@@ -27,11 +27,12 @@ jobs:
       MONGODB_URI: mongodb://root:example@mongo:27017/MLO_DE_Projet5?authSource=admin
       APP_DB: MLO_DE_Projet5
       COLL_NAME: admissions
-      CSV_PATH: MLO_P5_Sources/data/healthcare_dataset.csv // 
+      CSV_PATH: MLO_P5_Sources/Data/CSV/healthcare_dataset.csv
       BATCH_SIZE: 1000
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -44,8 +45,8 @@ jobs:
           pip install -r MLO_P5_Sources/requirements.txt
 
       - name: Run tests
+        working-directory: MLO_P5_Sources
+        env:
+          PYTHONPATH: ${{ github.workspace }}/MLO_P5_Sources
         run: |
-    # 1. Aller à la racine du projet
-        cd MLO_P5_Sources
-        export PYTHONPATH=$PWD:$PYTHONPATH   
-        pytest -v
+          pytest -v
