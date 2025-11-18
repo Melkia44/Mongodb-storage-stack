@@ -25,10 +25,10 @@ jobs:
 
     env:
       MONGODB_URI: mongodb://root:example@mongo:27017/MLO_DE_Projet5?authSource=admin
-      APP_DB: MLO_DE_Projet5
-      COLL_NAME: admissions
-      CSV_PATH: MLO_P5_Sources/Data/CSV/healthcare_dataset.csv
-      BATCH_SIZE: 1000
+    APP_DB: MLO_DE_Projet5
+    COLL_NAME: admissions
+    CSV_PATH: ${{ github.workspace }}/MLO_P5_Sources/Data/CSV/healthcare_dataset.csv
+    BATCH_SIZE: 1000
 
     steps:
       - name: Checkout code
