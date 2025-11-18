@@ -18,7 +18,7 @@ MONGODB_URI = os.getenv(
 
 # Chemin vers le CSV - détection automatique local vs conteneur
 _default_container_path = "/data/csv/healthcare_dataset.csv"
-default_local_path = str(Path(file_).parent.parent / "Data" / "CSV" / "healthcare_dataset.csv")
+_default_local_path = str(Path(__file__).parent.parent / "Data" / "CSV" / "healthcare_dataset.csv")
 
 # Utilise le chemin conteneur si le fichier existe, sinon le chemin local
 if os.path.exists(_default_container_path):
@@ -31,4 +31,4 @@ else:
 CSV_PATH = os.getenv("CSV_PATH", _default_csv)
 
 # Taille des batchs pour l'insert
-BATCH_SIZE = int(os.getenv("BATCH_SIZE", "1000"))
+BATCH_SIZE = int(os.getenv("BATCH_SIZE", "1000"))
