@@ -2,7 +2,7 @@ import os
 
 # Nom de la base et de la collection
 DB_NAME = os.getenv("APP_DB", "MLO_DE_Projet5")
-COLL_NAME = = os.getenv("COLL_NAME", "admissions")
+COLL_NAME = os.getenv("COLL_NAME", "admissions")
 
 # URI Mongo : on utilise le service Docker "mongo"
 APP_USER = os.getenv("APP_USER")
