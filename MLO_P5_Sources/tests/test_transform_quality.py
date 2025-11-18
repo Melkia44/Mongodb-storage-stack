@@ -1,3 +1,11 @@
+import sys
+import os
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.join(current_dir, '..', '..')
+sys.path.insert(0, project_root)
+
+
 from src.config import CSV_PATH
 from src.transform import load_csv, transform_dataframe, quality
 from src.validators import EXPECTED_COLUMNS, validate_columns

@@ -1,3 +1,14 @@
+import sys
+import os
+# --- Début de la correction pour le PYTHONPATH ---
+# Ceci ajoute le répertoire parent (ML0_P5_Sources) au chemin d'importation de Python
+# pour que 'src' puisse être trouvé.
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.join(current_dir, '..', '..')
+sys.path.insert(0, project_root)
+# --- Fin de la correction ---
+
+
 from pymongo import MongoClient
 
 from src.config import MONGODB_URI, DB_NAME, COLL_NAME
@@ -16,7 +27,9 @@ def test_ingest_inserts_expected_documents_and_indexes():
 
     client = MongoClient(MONGODB_URI)
     coll = client[DB_NAME][COLL_NAME]
-    mongo_count = coll.count_documents({})
+    
+    mongo_count = coll.count_documents({}) 
+    
     assert mongo_count == inserted, (
         f"Incohérence avec Mongo : {mongo_count=} != {inserted=}"
     )
