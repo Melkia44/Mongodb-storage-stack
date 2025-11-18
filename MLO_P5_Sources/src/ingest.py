@@ -11,13 +11,14 @@ def create_indexes(coll):
     coll.create_index([("Discharge Date", ASCENDING)])
     coll.create_index([("Name", TEXT), ("Medical Condition", TEXT), ("Medication", TEXT)])
 
-def ingest():
+def ingest(client: MongoClient | None = None):
     raw = load_csv(CSV_PATH)
     before_quality = quality(raw)
     df = transform_dataframe(raw)
     after_quality = quality(df)
     docs = dataframe_to_mongo_docs(df)
-    client = MongoClient(MONGODB_URI)
+    is_owned_client = client is None
+    client = client or MongoClient(MONGODB_URI)
     coll = client[DB_NAME][COLL_NAME]
     coll.delete_many({})
     for i in tqdm(range(0, len(docs), BATCH_SIZE), desc="Insert"):
@@ -25,6 +26,8 @@ def ingest():
     create_indexes(coll)
     count = coll.count_documents({})
     assert count == len(docs), f"Inconsistent count: mongo={count}, prepared={len(docs)}"
+    if is_owned_client:
+        client.close()
     return {"before_quality": before_quality, "after_quality": after_quality, "inserted": count}
 
 if __name__ == "__main__":

@@ -1,22 +1,21 @@
 import sys
 import os
-# --- Début de la correction pour le PYTHONPATH ---
-# Ceci ajoute le répertoire parent (ML0_P5_Sources) au chemin d'importation de Python
-# pour que 'src' puisse être trouvé.
+
+# Ajoute la racine du package (MLO_P5_Sources) au PYTHONPATH pour résoudre les imports de src
 current_dir = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.join(current_dir, '..', '..')
-sys.path.insert(0, project_root)
-# --- Fin de la correction ---
+project_root = os.path.abspath(os.path.join(current_dir, '..'))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 
-
-from pymongo import MongoClient
+import mongomock
 
 from src.config import MONGODB_URI, DB_NAME, COLL_NAME
 from src.ingest import ingest
 
 
 def test_ingest_inserts_expected_documents_and_indexes():
-    report = ingest()
+    client = mongomock.MongoClient()
+    report = ingest(client=client)
 
     inserted = report["inserted"]
     after_quality = report["after_quality"]
@@ -25,18 +24,18 @@ def test_ingest_inserts_expected_documents_and_indexes():
         f"Incohérence interne : inserted={inserted}, row_count={after_quality['row_count']}"
     )
 
-    client = MongoClient(MONGODB_URI)
     coll = client[DB_NAME][COLL_NAME]
-    
-    mongo_count = coll.count_documents({}) 
-    
+
+    mongo_count = coll.count_documents({})
+
     assert mongo_count == inserted, (
         f"Incohérence avec Mongo : {mongo_count=} != {inserted=}"
     )
 
 
 def test_ingest_improves_data_quality():
-    report = ingest()
+    client = mongomock.MongoClient()
+    report = ingest(client=client)
     before = report["before_quality"]
     after = report["after_quality"]
 
