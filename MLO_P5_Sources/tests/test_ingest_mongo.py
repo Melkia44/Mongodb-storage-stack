@@ -1,16 +1,16 @@
-import sys
 import os
+import sys
 
-# Ajoute la racine du package (MLO_P5_Sources) au PYTHONPATH pour résoudre les imports de src
 current_dir = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.abspath(os.path.join(current_dir, '..'))
+project_root = os.path.abspath(os.path.join(current_dir, ".."))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-import mongomock
-
 from src.config import MONGODB_URI, DB_NAME, COLL_NAME
 from src.ingest import ingest
+
+from pymongo import MongoClient
+
 
 
 def test_ingest_inserts_expected_documents_and_indexes():
